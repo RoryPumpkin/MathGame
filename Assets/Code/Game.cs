@@ -50,6 +50,8 @@ public class Game : MonoBehaviour
         if(player == null)
         {
             //Use Sin to animate the colour of the text (GUI.color) between alpha 0.5 and 1.0
+            GUI.color = new Color(1,1,1, 0.5f*(float)Mathf.Sin(Time.time*5)+0.5f);
+
             GUI.Label(new Rect(Screen.width * .5f - 50.0f, Screen.height * .5f - 10.0f, 100.0f, 100.0f), "YOU LOSE!");
         }
         else
