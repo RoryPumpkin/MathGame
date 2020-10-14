@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Game : MonoBehaviour
@@ -36,16 +37,30 @@ public class Game : MonoBehaviour
             enemies.Add(new Enemy(new DevMath.Vector2(Random.Range(.0f, Screen.width), Random.Range(.0f, Screen.height))));
         }
 
+        player.enemy = enemies.First().Circle;
+
         projectiles = new List<Projectile>();
     }
 
     private void OnGUI()
     {
+        ScreenShake();
         player?.Render();
 
-        enemies.ForEach(e => e.Render());
+        foreach(Enemy e in enemies)
+        {
+            ScreenShake();
+            e.Render();
+        }
 
-        projectiles.ForEach(p => p.Render());
+        foreach (Projectile p in projectiles)
+        {
+            ScreenShake();
+            p.Render();
+        }
+
+        //enemies.ForEach(e => e.Render());
+        //projectiles.ForEach(p => p.Render());
 
         if(player == null)
         {
@@ -58,8 +73,6 @@ public class Game : MonoBehaviour
 		{
             if (Input.GetKey(KeyCode.Q))
             {
-                
-
                 foreach (var enemy in enemies)
                 {
                     var direction = enemy.Position - player.Position;
@@ -95,6 +108,10 @@ public class Game : MonoBehaviour
     private void ScreenShake()
     {
         //Implement screen shake with Sin + Matrices
+        Matrix4x4 matrix = new Matrix4x4();
+        matrix.SetTRS(new Vector3(10f * (float)Mathf.Sin(Time.time * 10) + 10f, 10f * (float)Mathf.Sin(Time.time * 10) + 10f, 0), Quaternion.Euler(Vector3.zero), new Vector3(1, 1, 1));
+        GUI.matrix = Matrix4x4.identity;
+        GUI.matrix = matrix;
     }
 
     private void Update()
